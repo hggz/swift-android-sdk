@@ -30,7 +30,22 @@ jobs:
           run: |
             echo "target repo: ${{ inputs.target-repo }}"
             echo "hash: ${{ inputs.checkout-hash }}"
+        - name: Fetch last toolchain artifacts
+          run: |
+            cd
+            echo 'grabbing last swift android release ${SWIFT_TAG}'
+            wget -q https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-5.8-RELEASE-ubuntu22.04.tar.gz
+            echo 'grabbing last swift android sdk ${SWIFT_TAG}'
+            wget -q https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-release-android-aarch64-24-sdk.tar.xz
+        - name: Check SDK files exist
+          id: check_files
+          uses: andstor/file-existence-action@v1
+          with:
+            files: |
+              /home/runner/swift-5.8-RELEASE-ubuntu22.04.tar.gz
+              /home/runner/swift-release-android-aarch64-24-sdk.tar.xz
         - name: Get latest toolchain
+          if: steps.check_files.outputs.files_exists == 'false'
           run: |
             SWIFT_BRANCH="${SWIFT_TAG} | cut -d- -f2)-release"
             cd
@@ -50,6 +65,7 @@ jobs:
             git clone --branch ci https://github.com/Swift-Commons/swift-android-sdk
             mv swift-android-sdk sdk-config
         - name: Build Swift release Android SDK if not the latest
+          if: steps.check_files.outputs.files_exists == 'false'
           run: |
             cd sdk-config
             sudo apt install ninja-build
