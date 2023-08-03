@@ -68,9 +68,7 @@ jobs:
           id: check_files
           uses: andstor/file-existence-action@v1
           with:
-            files: |
-              /home/runner/swift-5.8-RELEASE-ubuntu22.04.tar.gz
-              /home/runner/swift-release-android-aarch64-24-sdk.tar.xz
+            files: "/home/runner/swift-5.8-RELEASE-ubuntu22.04.tar.gz, /home/runner/swift-release-android-aarch64-24-sdk.tar.xz"
         - name: Build Swift release Android SDK if not the latest
           if: steps.check_files.outputs.files_exists == 'false'
           run: |
