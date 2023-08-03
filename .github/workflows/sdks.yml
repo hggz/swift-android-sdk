@@ -9,6 +9,8 @@ on:
         required: false
         type: string
   push:
+    tags:
+      - "v*.*.*"
     branches:
       - ci
 jobs:
@@ -67,6 +69,13 @@ jobs:
 
             tar cJf ~/$SDK_NAME.tar.xz $SDK_NAME
             rm -rf $SDK_NAME
+        - name: Release
+          uses: softprops/action-gh-release@v1
+          if: startsWith(github.ref, 'refs/tags/')
+          with:
+            files: |
+              ~/${SWIFT_TAG}-ubuntu22.04.tar.gz
+              ~/swift-release-android-${ANDROID_ARCH}*-${ANDROID_API_LEVEL}-sdk.tar.xz
         - name: Unpack release toolchain and SDK
           id: sdk-unpack
           run: |
