@@ -30,20 +30,6 @@ jobs:
           run: |
             echo "target repo: ${{ inputs.target-repo }}"
             echo "hash: ${{ inputs.checkout-hash }}"
-        - name: Fetch last toolchain artifacts
-          run: |
-            cd
-            echo 'grabbing last swift android release ${SWIFT_TAG}'
-            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-5.8-RELEASE-ubuntu22.04.tar.gz
-            echo 'grabbing last swift android sdk ${SWIFT_TAG}'
-            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-release-android-aarch64-24-sdk.tar.xz
-        - name: Check SDK files exist
-          id: check_files
-          uses: andstor/file-existence-action@v1
-          with:
-            files: |
-              /home/runner/swift-5.8-RELEASE-ubuntu22.04.tar.gz
-              /home/runner/swift-release-android-aarch64-24-sdk.tar.xz
         - name: Get latest toolchain
           if: steps.check_files.outputs.files_exists == 'false'
           run: |
@@ -64,6 +50,27 @@ jobs:
             mv sdk-config ${REPO_NAME}
             git clone --branch ci https://github.com/hggz/swift-android-sdk
             mv swift-android-sdk sdk-config
+        - name: Fetch last toolchain artifacts
+          run: |
+            cd
+            echo 'grabbing last swift android release ${SWIFT_TAG}'
+            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-5.8-RELEASE-ubuntu22.04.tar.gz
+            echo 'grabbing last swift android sdk ${SWIFT_TAG}'
+            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-release-android-aarch64-24-sdk.tar.xz
+            echo 'current dir'
+            ls
+            cd ~/
+            echo 'home dir'
+            pwd
+            echo 'home dir contents'
+            ls
+        - name: Check SDK files exist
+          id: check_files
+          uses: andstor/file-existence-action@v1
+          with:
+            files: |
+              /home/runner/swift-5.8-RELEASE-ubuntu22.04.tar.gz
+              /home/runner/swift-release-android-aarch64-24-sdk.tar.xz
         - name: Build Swift release Android SDK if not the latest
           if: steps.check_files.outputs.files_exists == 'false'
           run: |
@@ -87,19 +94,19 @@ jobs:
             patchelf --set-rpath \$ORIGIN $SDK/usr/lib/swift/android/libdispatch.so
             patchelf --set-rpath \$ORIGIN/../..:\$ORIGIN $SDK/usr/lib/swift/android/lib[FXs]*.so
 
-            echo "current dir"
-            ls
-            echo "home dir"
-            ls ~/
-            tar cJf ~/$SDK_NAME.tar.xz $SDK_NAME
-            rm -rf $SDK_NAME
-            echo "post rm current dir"
-            ls
-            echo "post home dir"
-            ls ~/
-            echo "home dir full path"
-            cd ~/
-            pwd
+            # echo "current dir"
+            # ls
+            # echo "home dir"
+            # ls ~/
+            # tar cJf ~/$SDK_NAME.tar.xz $SDK_NAME
+            # rm -rf $SDK_NAME
+            # echo "post rm current dir"
+            # ls
+            # echo "post home dir"
+            # ls ~/
+            # echo "home dir full path"
+            # cd ~/
+            # pwd
         - name: Release
           uses: softprops/action-gh-release@v1
           if: startsWith(github.ref, 'refs/tags/')
