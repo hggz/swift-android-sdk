@@ -81,13 +81,16 @@ jobs:
             ls
             echo "post home dir"
             ls ~/
+            echo "home dir full path"
+            cd ~/
+            pwd
         - name: Release
           uses: softprops/action-gh-release@v1
           if: startsWith(github.ref, 'refs/tags/')
           with:
             files: |
               ~/swift-5.8-RELEASE-ubuntu22.04.tar.gz
-              ~/swift-release-android-aarch64*-24-sdk.tar.xz
+              ~/swift-release-android-aarch64-24-sdk.tar.xz
         - name: Unpack release toolchain and SDK
           id: sdk-unpack
           run: |
