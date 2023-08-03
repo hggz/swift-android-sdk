@@ -1,7 +1,8 @@
 name: SDKs
 
 permissions:
-  contents: write
+# toggle when ready to publish new artifact
+  contents: read
 
 on:
   workflow_call:
