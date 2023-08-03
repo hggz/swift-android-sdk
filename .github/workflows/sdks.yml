@@ -34,9 +34,9 @@ jobs:
           run: |
             cd
             echo 'grabbing last swift android release ${SWIFT_TAG}'
-            wget -q https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-5.8-RELEASE-ubuntu22.04.tar.gz
+            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-5.8-RELEASE-ubuntu22.04.tar.gz
             echo 'grabbing last swift android sdk ${SWIFT_TAG}'
-            wget -q https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-release-android-aarch64-24-sdk.tar.xz
+            wget https://github.com/hggz/swift-android-sdk/releases/download/v0.1.5/swift-release-android-aarch64-24-sdk.tar.xz
         - name: Check SDK files exist
           id: check_files
           uses: andstor/file-existence-action@v1
@@ -62,7 +62,7 @@ jobs:
             REPO_NAME=$(basename ${{ inputs.target-repo }})
             mkdir ${REPO_NAME}
             mv sdk-config ${REPO_NAME}
-            git clone --branch ci https://github.com/Swift-Commons/swift-android-sdk
+            git clone --branch ci https://github.com/hggz/swift-android-sdk
             mv swift-android-sdk sdk-config
         - name: Build Swift release Android SDK if not the latest
           if: steps.check_files.outputs.files_exists == 'false'
