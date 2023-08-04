@@ -143,15 +143,17 @@ jobs:
             rm -rf ${REPO_NAME}
             mv ${REPO_NAME}_temp ${REPO_NAME}
 
+            # TODO - clean this, had to do it to play nice with patchelf config files from prebuilt binary
             cd /home/runner/work
-            mv Alamofire/Alamofire Alamofire/swift-android-sdk
-            mv Alamofire swift-android-sdk
+            mv ${REPO_NAME}/${REPO_NAME} ${REPO_NAME}/swift-android-sdk
+            mv ${REPO_NAME} swift-android-sdk
             cd swift-android-sdk/swift-android-sdk
 
             cd ${REPO_NAME}/
             ../sdk-config/${SWIFT_TAG}-ubuntu22.04/usr/bin/swift build --build-tests --destination ../sdk-config/swift-release-*-sdk/usr/swiftpm-android-${ANDROID_ARCH}.json -Xlinker -rpath -Xlinker \$ORIGIN/lib/swift/android
 
+            # TODO - clean this, had to do it to play nice with patchelf config files from prebuilt binary
             cd /home/runner/work
-            mv swift-android-sdk/swift-android-sdk swift-android-sdk/Alamofire
-            mv swift-android-sdk Alamofire
-            cd Alamofire/Alamofire
+            mv swift-android-sdk/swift-android-sdk swift-android-sdk/${REPO_NAME}
+            mv swift-android-sdk ${REPO_NAME}
+            cd ${REPO_NAME}/${REPO_NAME}
